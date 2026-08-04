@@ -154,6 +154,24 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .cta-band{padding:40px 24px}
 }
 </style>
+<!-- Google tag (gtag.js) — Consent Mode v2, storage denied by default: no cookies set without consent -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JJMQQ8Z43L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied'
+  });
+  gtag('js', new Date());
+  gtag('config', 'G-JJMQQ8Z43L');
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="mailto:"]') : null;
+    if (a) gtag('event', 'email_click', { link_text: a.textContent.trim() });
+  });
+</script>
 </head>
 <body>
 
