@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aletheia New Client Form</title>
+<meta name="description" content="New client questionnaire for Aletheia Rolfing® bodywork, Westoning, Bedfordshire.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="/assets/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: one calm reading column, like a letter from the practice; six parts separated by hairlines, a thin progress thread pinned to the top. Tokens follow aletheiabodywork.co.uk. */
+:root{
+  --paper:#faf7f1;
+  --ink:#232019;
+  --ink-soft:#5c564a;
+  --accent:#8a5a2b;
+  --accent-deep:#6e4520;
+  --on-accent:#ffffff;
+  --line:#e5ddcf;
+  --card:#f3eee3;
+  --field:#fffdf9;
+  --warn:#a3402a;
+  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1b1915; --ink:#efe8db; --ink-soft:#b2a998; --accent:#c38c57; --accent-deep:#dca36d;
+    --on-accent:#1b1915; --line:#39342b; --card:#25221c; --field:#211f1a; --warn:#e2856d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1b1915; --ink:#efe8db; --ink-soft:#b2a998; --accent:#c38c57; --accent-deep:#dca36d;
+  --on-accent:#1b1915; --line:#39342b; --card:#25221c; --field:#211f1a; --warn:#e2856d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:1.0625rem;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--font-display);font-weight:500;line-height:1.15;letter-spacing:-0.01em;margin:0;text-wrap:balance}
+a{color:var(--accent-deep)}
+.wrap{max-width:700px;margin:0 auto;padding-inline:20px}
+
+/* progress thread */
+.thread{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.thread .wrap{display:flex;align-items:center;gap:16px;padding-block:12px}
+.brandmark{font-family:var(--font-display);font-weight:600;letter-spacing:0.22em;text-transform:uppercase;font-size:0.95rem}
+.bar{flex:1;height:3px;background:var(--line);border-radius:3px;overflow:hidden;min-width:60px}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}
+.bar-label{font-size:0.8rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* intro */
+.intro{padding-block:52px 40px}
+.intro .eyebrow{font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-deep);font-weight:600}
+.intro h1{font-size:clamp(2rem,5vw,2.8rem);margin-block:14px 20px}
+.intro p{color:var(--ink-soft);margin:0 0 14px;max-width:62ch}
+.intro p strong{color:var(--ink);font-weight:600}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:0.92rem;color:var(--ink-soft)}
+.facts b{color:var(--ink);font-weight:600}
+
+/* parts */
+.part{border-top:1px solid var(--line);padding-block:44px}
+.part-head{margin-bottom:26px}
+.part-num{font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.part h2{font-size:clamp(1.5rem,3.4vw,1.95rem);margin-block:6px 10px}
+.part-head p{margin:0;color:var(--ink-soft);max-width:62ch}
+.fields{display:grid;gap:24px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:560px){.row{grid-template-columns:1fr}}
+.q{display:grid;gap:8px;min-width:0;border:0;padding:0;margin:0}
+.q > label,.q > legend{font-weight:600;font-size:0.98rem;padding:0}
+.q > legend{margin-bottom:8px}
+.req{color:var(--accent-deep);font-weight:500}
+.opt{color:var(--ink-soft);font-weight:400;font-size:0.88rem}
+.hint{font-size:0.9rem;color:var(--ink-soft);margin:-2px 0 2px}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{
+  width:100%;font:inherit;font-size:1rem;color:var(--ink);background:var(--field);
+  border:1px solid var(--line);border-radius:4px;padding:12px 14px;
+}
+textarea{min-height:110px;resize:vertical;line-height:1.55}
+input::placeholder,textarea::placeholder{color:var(--ink-soft);opacity:.75}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.touched input:invalid,.touched textarea:invalid,.touched select:invalid{border-color:var(--warn)}
+
+/* pills (checkbox / radio chips) */
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{position:relative}
+.pill input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.pill span{
+  display:inline-block;padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+  font-size:0.93rem;background:var(--field);color:var(--ink);cursor:pointer;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.pill input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.pill input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.pill:hover span{border-color:var(--accent)}
+
+/* health list: two-column checklist */
+.checklist{display:grid;grid-template-columns:1fr 1fr;gap:2px 24px}
+@media (max-width:560px){.checklist{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:0.96rem;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--accent);width:17px;height:17px;flex:none}
+
+/* pain scale */
+.scale{display:grid;gap:6px}
+.scale-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.scale output{font-family:var(--font-display);font-size:1.7rem;font-variant-numeric:tabular-nums;color:var(--accent-deep);min-width:3ch;text-align:right}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.scale-ends{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--ink-soft)}
+
+/* notes set in the practice voice */
+.note{background:var(--card);border-radius:6px;padding:20px 22px;font-size:0.96rem;color:var(--ink-soft)}
+.note p{margin:0}
+.note em{font-family:var(--font-display);font-style:italic;color:var(--ink)}
+
+/* consent */
+.consents{display:grid;gap:4px}
+.consents .check{padding:10px 0;border-bottom:1px solid var(--line)}
+.consents .check:last-child{border-bottom:0}
+.privacy{font-size:0.88rem;color:var(--ink-soft);margin-top:6px}
+
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:32px}
+.btn{
+  font:inherit;font-weight:600;font-size:1rem;padding:15px 30px;border-radius:4px;border:1px solid var(--accent);
+  background:var(--accent);color:var(--on-accent);cursor:pointer;text-decoration:none;display:inline-block;
+  transition:background .15s ease;
+}
+.btn:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--accent-deep)}
+.btn.ghost:hover{background:var(--card)}
+.form-error{color:var(--warn);font-size:0.95rem;margin:0}
+.saved{font-size:0.85rem;color:var(--ink-soft)}
+
+/* review panel */
+.review{border-top:1px solid var(--line);padding-block:44px 64px}
+.review h2{font-size:clamp(1.6rem,3.6vw,2.1rem);margin-bottom:12px}
+.review > p{color:var(--ink-soft);max-width:62ch;margin:0 0 14px}
+.addr{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0 22px}
+.addr code{font-family:var(--font-body);font-weight:600;font-size:1.05rem;background:var(--card);padding:8px 14px;border-radius:4px;user-select:all;color:var(--ink)}
+.summary{width:100%;min-height:340px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.85rem;line-height:1.55;background:var(--field)}
+.copied{font-size:0.9rem;color:var(--accent-deep)}
+
+footer{border-top:1px solid var(--line);padding-block:28px 48px;color:var(--ink-soft);font-size:0.85rem}
+footer p{margin:0 0 6px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="thread" aria-hidden="true">
+  <div class="wrap">
+    <span class="brandmark">Aletheia</span>
+    <div class="bar"><span id="barFill"></span></div>
+    <span class="bar-label" id="barLabel">0 of 11 essentials</span>
+  </div>
+</div>
+
+<main>
+  <header class="intro wrap">
+    <div class="eyebrow">Before your first session</div>
+    <h1>Tell me about your body.</h1>
+    <p>This helps me understand what you&rsquo;re bringing, so our first hour can go straight to the work. It takes about ten minutes. Answer as fully or as briefly as you like: <strong>&ldquo;I don&rsquo;t know&rdquo; is always a fine answer.</strong></p>
+    <p>Everything you write is confidential and read only by me.</p>
+    <div class="facts">
+      <span><b>Session</b> 60 minutes · £80</span>
+      <span><b>Where</b> 5 Lovett Green, Westoning MK45 4SP</span>
+      <span><b>Questions</b> hello@aletheiabodywork.co.uk</span>
+    </div>
+  </header>
+
+  <form id="intake" class="wrap" novalidate>
+
+    <!-- 1 -->
+    <section class="part" id="about">
+      <div class="part-head">
+        <div class="part-num">Part 1 of 5</div>
+        <h2>About you</h2>
+        <p>The practical details, so I can reach you and keep your notes in order.</p>
+      </div>
+      <div class="fields">
+        <div class="row">
+          <div class="q" data-q="First name"><label for="firstName">First name <span class="req">*</span></label><input type="text" id="firstName" name="firstName" autocomplete="given-name" required></div>
+          <div class="q" data-q="Last name"><label for="lastName">Last name <span class="req">*</span></label><input type="text" id="lastName" name="lastName" autocomplete="family-name" required></div>
+        </div>
+        <div class="row">
+          <div class="q" data-q="Email"><label for="email">Email <span class="req">*</span></label><input type="email" id="email" name="email" autocomplete="email" required></div>
+          <div class="q" data-q="Phone"><label for="phone">Mobile <span class="req">*</span></label><input type="tel" id="phone" name="phone" autocomplete="tel" required></div>
+        </div>
+        <div class="row">
+          <div class="q" data-q="Date of birth"><label for="dob">Date of birth <span class="req">*</span></label><input type="date" id="dob" name="dob" autocomplete="bday" required></div>
+          <div class="q" data-q="Occupation"><label for="occupation">What do you do for work?</label><input type="text" id="occupation" name="occupation" placeholder="Or how you spend most days"></div>
+        </div>
+        <div class="q" data-q="Found Aletheia via">
+            <label for="source">How did you find me?</label>
+            <select id="source" name="source">
+              <option value="">Choose one</option>
+              <option>Recommended by a friend or client</option>
+              <option>Google search or reviews</option>
+              <option>YouTube</option>
+              <option>European Rolfing Association directory</option>
+              <option>Referred by a health professional</option>
+              <option>Other</option>
+            </select>
+        </div>
+        <div class="row">
+          <div class="q" data-q="Emergency contact"><label for="emgName">Emergency contact <span class="req">*</span></label><input type="text" id="emgName" name="emgName" placeholder="Name and relationship" required></div>
+          <div class="q" data-q="Emergency contact phone"><label for="emgPhone">Their phone number <span class="req">*</span></label><input type="tel" id="emgPhone" name="emgPhone" required></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="part" id="why">
+      <div class="part-head">
+        <div class="part-num">Part 2 of 5</div>
+        <h2>What brings you here</h2>
+        <p>Pain, stiffness, a posture you&rsquo;ve stopped trying to hold, or a sense that your body hasn&rsquo;t come back from something. All of it is welcome.</p>
+      </div>
+      <div class="fields">
+        <div class="q" data-q="In their words">
+          <label for="story">In your own words, what&rsquo;s bringing you to Rolfing? <span class="req">*</span></label>
+          <textarea id="story" name="story" required placeholder="Tell me what your body has been doing. Or write &ldquo;I don&rsquo;t know where to start&rdquo;. Both are fine."></textarea>
+        </div>
+
+        <fieldset class="q" data-q="Areas of concern">
+          <legend>Where do you feel it? <span class="opt">(choose any)</span></legend>
+          <div class="pills">
+            <label class="pill"><input type="checkbox" name="areas" id="area-head" value="Head"><span>Head</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-jaw" value="Jaw"><span>Jaw</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-neck" value="Neck"><span>Neck</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-shoulders" value="Shoulders"><span>Shoulders</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-arms" value="Arms, wrists or hands"><span>Arms, wrists or hands</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-chest" value="Chest or ribs"><span>Chest or ribs</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-upper" value="Upper back"><span>Upper back</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-lower" value="Lower back"><span>Lower back</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-pelvis" value="Hips or pelvis"><span>Hips or pelvis</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-legs" value="Legs"><span>Legs</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-knees" value="Knees"><span>Knees</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-feet" value="Ankles or feet"><span>Ankles or feet</span></label>
+            <label class="pill"><input type="checkbox" name="areas" id="area-whole" value="Whole body"><span>Whole body</span></label>
+          </div>
+          <div class="pills" style="margin-top:4px">
+            <label class="pill"><input type="radio" name="side" id="side-left" value="Mostly left side"><span>Mostly left side</span></label>
+            <label class="pill"><input type="radio" name="side" id="side-right" value="Mostly right side"><span>Mostly right side</span></label>
+            <label class="pill"><input type="radio" name="side" id="side-both" value="Both sides"><span>Both sides</span></label>
+          </div>
+        </fieldset>
+
+        <div class="row">
+          <div class="q" data-q="How long">
+            <label for="duration">How long has this been going on?</label>
+            <select id="duration" name="duration">
+              <option value="">Choose one</option>
+              <option>Less than 3 months</option>
+              <option>3 to 12 months</option>
+              <option>1 to 5 years</option>
+              <option>More than 5 years</option>
+              <option>As long as I can remember</option>
+            </select>
+          </div>
+          <div class="q" data-q="Typical discomfort (0–10)">
+            <div class="scale">
+              <div class="scale-top"><label for="pain">On a typical day, how much discomfort?</label><output id="painOut" for="pain">3</output></div>
+              <input type="range" id="pain" name="pain" min="0" max="10" step="1" value="3">
+              <div class="scale-ends"><span>0 &middot; none</span><span>10 &middot; the worst imaginable</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="q" data-q="What makes it better"><label for="better">What makes it better?</label><textarea id="better" name="better" placeholder="Walking, heat, rest, a certain position&hellip;"></textarea></div>
+          <div class="q" data-q="What makes it worse"><label for="worse">What makes it worse?</label><textarea id="worse" name="worse" placeholder="Sitting, stress, mornings, a certain movement&hellip;"></textarea></div>
+        </div>
+
+        <fieldset class="q" data-q="Already tried">
+          <legend>What have you already tried? <span class="opt">(choose any)</span></legend>
+          <div class="pills">
+            <label class="pill"><input type="checkbox" name="tried" id="tried-massage" value="Massage"><span>Massage</span></label>
+            <label class="pill"><input type="checkbox" name="tried" id="tried-physio" value="Physiotherapy"><span>Physiotherapy</span></label>
+            <label class="pill"><input type="checkbox" name="tried" id="tried-osteo" value="Osteopathy"><span>Osteopathy</span></label>
+            <label class="pill"><input type="checkbox" name="tried" id="tried-chiro" value="Chiropractic"><span>Chiropractic</span></label>
+            <label class="pill"><input type="checkbox" name="tried" id="tried-acu" value="Acupuncture"><span>Acupuncture</span></label>
+            <label class="pill"><input type="checkbox" name="tried" id="tried-yoga" value="Yoga or Pilates"><span>Yoga or Pilates</span></label>
+            <label class="pill"><input type="checkbox" name="tried" id="tried-meds" value="Painkillers or injections"><span>Painkillers or injections</span></label>
+            <label class="pill"><input type="checkbox" name="tried" id="tried-rolf" value="Rolfing or Structural Integration before"><span>Rolfing or Structural Integration before</span></label>
+          </div>
+        </fieldset>
+
+        <div class="q" data-q="Hoped-for outcome">
+          <label for="hope">If our work together went well, what would be different for you?</label>
+          <textarea id="hope" name="hope" placeholder="Picking up my child without bracing. Sleeping through. Standing at the front of a room and feeling my feet&hellip;"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="part" id="health">
+      <div class="part-head">
+        <div class="part-num">Part 3 of 5</div>
+        <h2>Your health</h2>
+        <p>Rolfing is deep, hands-on work. Some conditions mean I&rsquo;ll adapt what I do, and a few mean we should check with your GP first.</p>
+      </div>
+      <div class="fields">
+        <div class="q" data-q="Health conditions">
+          <label for="conditions">Is there any health condition I should know about? <span class="req">*</span></label>
+          <p class="hint">Now or in the past. If there&rsquo;s nothing, write &ldquo;None&rdquo;.</p>
+          <textarea id="conditions" name="conditions" required></textarea>
+        </div>
+
+
+        <div class="q" data-q="Injuries, accidents, surgeries">
+          <label for="history">Injuries, accidents and surgeries over your lifetime</label>
+          <p class="hint">Old ones matter too. Include falls, car accidents or whiplash, broken bones, sports injuries, births, and dental or orthodontic work.</p>
+          <textarea id="history" name="history"></textarea>
+        </div>
+
+        <div class="q" data-q="Other care"><label for="otherCare">Are you seeing a doctor, physio or other practitioner at the moment? For what?</label><input type="text" id="otherCare" name="otherCare"></div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="part" id="life">
+      <div class="part-head">
+        <div class="part-num">Part 4 of 5</div>
+        <h2>Your body day to day</h2>
+        <p>Rolfing looks at how you organise yourself in gravity, so the shape of an ordinary day tells me a lot.</p>
+      </div>
+      <div class="fields">
+        <fieldset class="q" data-q="Most of the day">
+          <legend>Most of your day is spent</legend>
+          <div class="pills">
+            <label class="pill"><input type="radio" name="day" id="day-sit" value="Sitting"><span>Sitting</span></label>
+            <label class="pill"><input type="radio" name="day" id="day-stand" value="Standing"><span>Standing</span></label>
+            <label class="pill"><input type="radio" name="day" id="day-move" value="On the move"><span>On the move</span></label>
+            <label class="pill"><input type="radio" name="day" id="day-drive" value="Driving"><span>Driving</span></label>
+            <label class="pill"><input type="radio" name="day" id="day-mix" value="A mix"><span>A mix</span></label>
+          </div>
+        </fieldset>
+        <div class="q" data-q="Movement and exercise"><label for="movement">How do you move? Exercise, sport, walking, dancing, gardening&hellip;</label><textarea id="movement" name="movement"></textarea></div>
+        <div class="row">
+          <fieldset class="q" data-q="Sleep">
+            <legend>How do you sleep?</legend>
+            <div class="pills">
+              <label class="pill"><input type="radio" name="sleep" id="sleep-well" value="Well"><span>Well</span></label>
+              <label class="pill"><input type="radio" name="sleep" id="sleep-ok" value="On and off"><span>On and off</span></label>
+              <label class="pill"><input type="radio" name="sleep" id="sleep-poor" value="Poorly"><span>Poorly</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="q" data-q="Stress lately">
+            <legend>Stress lately</legend>
+            <div class="pills">
+              <label class="pill"><input type="radio" name="stress" id="stress-low" value="Low"><span>Low</span></label>
+              <label class="pill"><input type="radio" name="stress" id="stress-mod" value="Moderate"><span>Moderate</span></label>
+              <label class="pill"><input type="radio" name="stress" id="stress-high" value="High"><span>High</span></label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="part" id="consent">
+      <div class="part-head">
+        <div class="part-num">Part 5 of 5</div>
+        <h2>Agreement</h2>
+        <p>The last step. Please read and tick each one.</p>
+      </div>
+      <div class="fields">
+        <div class="note"><p>Most people wear underwear or shorts and a sports top, so I can see how you stand and move. <em>Wear whatever lets you feel comfortable.</em> You can ask me to stop, slow down or change pressure at any point.</p></div>
+        <fieldset class="q" data-q="Agreed">
+          <legend class="opt" style="font-weight:400">All four are required.</legend>
+          <div class="consents">
+            <label class="check"><input type="checkbox" name="agree" id="ag-accurate" value="Information is accurate; will tell Luke of any health changes" required>The information I&rsquo;ve given is accurate, and I&rsquo;ll tell Luke if my health changes.</label>
+            <label class="check"><input type="checkbox" name="agree" id="ag-medical" value="Understands Rolfing is not medical diagnosis or treatment" required>I understand Rolfing® Structural Integration is not a medical diagnosis or treatment, and doesn&rsquo;t replace care from my GP or other health professionals.</label>
+            <label class="check"><input type="checkbox" name="agree" id="ag-touch" value="Consents to hands-on work; can stop or adjust at any time" required>I consent to hands-on bodywork, and I know I can ask to stop or adjust at any time.</label>
+            <label class="check"><input type="checkbox" name="agree" id="ag-data" value="Explicit consent to Aletheia holding health information for sessions" required>I give my explicit consent for Aletheia to hold the health information in this form, to use it only for my sessions, and to keep it confidential.</label>
+          </div>
+          <p class="privacy">Your notes are stored securely and never shared without your permission, except where the law requires it. You can ask to see or correct them at any time, or ask for them to be deleted once we&rsquo;ve finished working together (subject to record-keeping requirements).</p>
+        </fieldset>
+        <div class="row">
+          <div class="q" data-q="Signed (typed name)"><label for="signature">Type your full name to sign <span class="req">*</span></label><input type="text" id="signature" name="signature" required autocomplete="name"></div>
+          <div class="q" data-q="Date signed"><label for="signedOn">Date</label><input type="date" id="signedOn" name="signedOn"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn">Review my answers</button>
+        <span class="saved" id="savedNote">Your answers are kept on this device until you send them.</span>
+      </div>
+      <p class="form-error" id="formError" hidden></p>
+    </section>
+  </form>
+
+  <section class="review wrap" id="review" hidden>
+    <div class="part-num">Almost done</div>
+    <h2>Send your answers to Luke</h2>
+    <p>Your answers are below. Email them to Luke at the address here. Use the button to open a ready-made email, or copy the text into a message yourself.</p>
+    <div class="addr">
+      <code id="addr">hello@aletheiabodywork.co.uk</code>
+      <button type="button" class="btn ghost" id="copyAddr">Copy address</button>
+    </div>
+    <div class="actions" style="margin-top:0;margin-bottom:22px">
+      <a class="btn" id="mailLink" href="#">Open in my email</a>
+      <button type="button" class="btn ghost" id="copyAll">Copy my answers</button>
+      <span class="copied" id="copied" role="status"></span>
+    </div>
+    <label for="summary" class="opt">Your answers</label>
+    <textarea id="summary" class="summary" readonly></textarea>
+    <p class="quiet" style="color:var(--ink-soft);margin-top:18px">You&rsquo;ll hear back within one working day. <a href="#about" id="editAgain">Go back and edit</a> · <a href="#" id="clearAll">Clear this form from this device</a></p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>© Aletheia — Luke Gregorczyk, Certified Rolfer® · European Rolfing Association member</p>
+  <p>Rolfing® is a registered service mark of the Dr. Ida Rolf Institute.</p>
+</footer>
+
+<script>
+(function(){
+  var ADDRESS = 'hello@aletheiabodywork.co.uk';
+  var KEY = 'aletheia-intake-draft';
+  var form = document.getElementById('intake');
+  var review = document.getElementById('review');
+  var summary = document.getElementById('summary');
+  var errorEl = document.getElementById('formError');
+
+  // Pain scale readout
+  var pain = document.getElementById('pain'), painOut = document.getElementById('painOut');
+  function syncPain(){ painOut.textContent = pain.value; }
+  pain.addEventListener('input', syncPain);
+
+  // Default the signature date to today
+  var signedOn = document.getElementById('signedOn');
+  function today(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+
+  // Progress: required questions answered
+  var requiredNames = [];
+  form.querySelectorAll('[required]').forEach(function(el){
+    var n = el.type === 'checkbox' ? el.id : el.name;
+    if (requiredNames.indexOf(n) < 0) requiredNames.push(n);
+  });
+  function isDone(n){
+    var byId = document.getElementById(n);
+    if (byId && byId.type === 'checkbox') return byId.checked;
+    var els = form.elements[n];
+    if (!els) return false;
+    if (els.length && els[0] && els[0].type === 'radio') return Array.prototype.some.call(els, function(r){ return r.checked; });
+    return els.checkValidity ? (els.value.trim() !== '' && els.checkValidity()) : false;
+  }
+  function updateProgress(){
+    // the four consent boxes count as one essential
+    var names = requiredNames.filter(function(n){ return n.indexOf('ag-') !== 0; });
+    var total = names.length + 1;
+    var done = names.filter(isDone).length + (['ag-accurate','ag-medical','ag-touch','ag-data'].every(isDone) ? 1 : 0);
+    document.getElementById('barFill').style.width = Math.round(done/total*100) + '%';
+    document.getElementById('barLabel').textContent = done + ' of ' + total + ' essentials';
+  }
+
+  // Draft save / restore (device only)
+  function snapshot(){
+    var data = {};
+    Array.prototype.forEach.call(form.elements, function(el){
+      if (!el.id) return;
+      if (el.type === 'checkbox' || el.type === 'radio') data[el.id] = el.checked;
+      else if (el.tagName !== 'BUTTON') data[el.id] = el.value;
+    });
+    return data;
+  }
+  function restore(data){
+    Object.keys(data || {}).forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = !!data[id];
+      else el.value = data[id];
+    });
+  }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(snapshot())); } catch(e){} }
+  try { var saved = localStorage.getItem(KEY); if (saved) restore(JSON.parse(saved)); } catch(e){}
+  if (!signedOn.value) signedOn.value = today();
+  syncPain(); updateProgress();
+
+  form.addEventListener('input', function(){ updateProgress(); save(); });
+  form.addEventListener('change', function(){ updateProgress(); save(); });
+
+  // Build a plain-text summary grouped by part
+  function valuesOf(q){
+    var out = [];
+    q.querySelectorAll('input,select,textarea').forEach(function(el){
+      if (el.type === 'checkbox' || el.type === 'radio') { if (el.checked) out.push(el.value); }
+      else if (el.value && el.value.trim()) out.push(el.value.trim());
+    });
+    return out;
+  }
+  function buildSummary(){
+    var lines = [];
+    var name = (form.firstName.value + ' ' + form.lastName.value).trim();
+    lines.push('NEW CLIENT INTAKE: ' + name);
+    lines.push('Sent ' + new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}));
+    form.querySelectorAll('.part').forEach(function(part){
+      var title = part.querySelector('h2').textContent.toUpperCase();
+      var block = [];
+      part.querySelectorAll('[data-q]').forEach(function(q){
+        var v = valuesOf(q);
+        if (!v.length) return;
+        var label = q.getAttribute('data-q');
+        var multi = q.tagName === 'FIELDSET' && v.length > 1;
+        var long = v.join(' ').length > 70 || /\n/.test(v.join(''));
+        if (multi) block.push(label + ':\n  - ' + v.join('\n  - '));
+        else if (long) block.push(label + ':\n  ' + v.join(', ').replace(/\n/g, '\n  '));
+        else block.push(label + ': ' + v.join(', '));
+      });
+      if (block.length) { lines.push('', '— ' + title + ' —'); lines = lines.concat(block); }
+    });
+    return lines.join('\n');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    form.classList.add('touched');
+    if (!form.checkValidity()) {
+      var first = form.querySelector(':invalid');
+      errorEl.textContent = 'A few essentials are still empty. They are marked in red, starting with the one I’ve just taken you to.';
+      errorEl.hidden = false;
+      if (first) { first.scrollIntoView({behavior:'smooth', block:'center'}); first.focus({preventScroll:true}); }
+      return;
+    }
+    errorEl.hidden = true;
+    var text = buildSummary();
+    summary.value = text;
+    var subject = 'New client intake: ' + (form.firstName.value + ' ' + form.lastName.value).trim();
+    document.getElementById('mailLink').href = 'mailto:' + ADDRESS + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
+    review.hidden = false;
+    review.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  function copyText(text, msg){
+    var status = document.getElementById('copied');
+    function fallback(){ summary.focus(); summary.select(); status.textContent = 'Selected. Press Ctrl+C or ⌘C to copy.'; }
+    try {
+      navigator.clipboard.writeText(text).then(function(){ status.textContent = msg; }, fallback);
+    } catch(err){ fallback(); }
+  }
+  document.getElementById('copyAll').addEventListener('click', function(){ copyText(summary.value, 'Copied. Paste it into an email to Luke.'); });
+  document.getElementById('copyAddr').addEventListener('click', function(){ copyText(ADDRESS, 'Address copied.'); });
+
+  document.getElementById('editAgain').addEventListener('click', function(){ review.hidden = true; });
+  document.getElementById('clearAll').addEventListener('click', function(e){
+    e.preventDefault();
+    form.reset(); form.classList.remove('touched');
+    try { localStorage.removeItem(KEY); } catch(err){}
+    signedOn.value = today(); syncPain(); updateProgress();
+    summary.value = ''; review.hidden = true;
+    document.getElementById('savedNote').textContent = 'Cleared from this device.';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+})();
+</script>
+
+</body>
+</html>
