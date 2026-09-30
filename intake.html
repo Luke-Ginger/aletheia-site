@@ -138,6 +138,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .btn.ghost{background:transparent;color:var(--accent-deep)}
 .btn.ghost:hover{background:var(--card)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .form-error{color:var(--warn);font-size:0.95rem;margin:0}
 .saved{font-size:0.85rem;color:var(--ink-soft)}
 
@@ -179,6 +180,7 @@ footer p{margin:0 0 6px}
   </header>
 
   <form id="intake" class="wrap" novalidate>
+    <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
 
     <!-- 1 -->
     <section class="part" id="about">
@@ -394,7 +396,7 @@ footer p{margin:0 0 6px}
       </div>
 
       <div class="actions">
-        <button type="submit" class="btn">Review my answers</button>
+        <button type="submit" class="btn" id="submitBtn">Review my answers</button>
         <span class="saved" id="savedNote">Your answers are kept on this device until you send them.</span>
       </div>
       <p class="form-error" id="formError" hidden></p>
@@ -404,7 +406,7 @@ footer p{margin:0 0 6px}
   <section class="review wrap" id="review" hidden>
     <div class="part-num">Almost done</div>
     <h2>Send your answers to Luke</h2>
-    <p>Your answers are below. Email them to Luke at the address here. Use the button to open a ready-made email, or copy the text into a message yourself.</p>
+    <p id="reviewIntro">Your answers are below. Email them to Luke at the address here. Use the button to open a ready-made email, or copy the text into a message yourself.</p>
     <div class="addr">
       <code id="addr">hello@aletheiabodywork.co.uk</code>
       <button type="button" class="btn ghost" id="copyAddr">Copy address</button>
@@ -418,6 +420,13 @@ footer p{margin:0 0 6px}
     <textarea id="summary" class="summary" readonly></textarea>
     <p class="quiet" style="color:var(--ink-soft);margin-top:18px">You&rsquo;ll hear back within one working day. <a href="#about" id="editAgain">Go back and edit</a> · <a href="#" id="clearAll">Clear this form from this device</a></p>
   </section>
+
+  <section class="review wrap" id="thanks" hidden tabindex="-1">
+    <div class="part-num">Sent</div>
+    <h2 id="thanksTitle">Thank you.</h2>
+    <p>Your answers are with Luke. You&rsquo;ll hear back within one working day at the email address you gave.</p>
+    <p>If anything changes before your session, email <b>hello@aletheiabodywork.co.uk</b>.</p>
+  </section>
 </main>
 
 <footer class="wrap">
@@ -428,6 +437,8 @@ footer p{margin:0 0 6px}
 <script>
 (function(){
   var ADDRESS = 'hello@aletheiabodywork.co.uk';
+  // Google Apps Script web app that saves answers to a Sheet and emails Luke. Empty = client emails answers themselves.
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbxZSLcB_v96grmBfj5P3VmxSRz6Htf0RInLJxumoJRrJ929eh9bmsucG9eFn7tq2A3J/exec';
   var KEY = 'aletheia-intake-draft';
   var form = document.getElementById('intake');
   var review = document.getElementById('review');
@@ -524,6 +535,60 @@ footer p{margin:0 0 6px}
     return lines.join('\n');
   }
 
+  var submitBtn = document.getElementById('submitBtn');
+  if (ENDPOINT) submitBtn.textContent = 'Send to Luke';
+
+  function collectFields(){
+    var out = [];
+    form.querySelectorAll('.part [data-q]').forEach(function(q){
+      var v = valuesOf(q);
+      if (v.length) out.push({ label: q.getAttribute('data-q'), value: v.join(', ') });
+    });
+    return out;
+  }
+
+  function showReview(failed){
+    document.getElementById('reviewIntro').textContent = failed
+      ? 'Your answers couldn\u2019t be sent automatically. Nothing is lost: please email them to Luke at the address below. The button opens a ready-made email, or you can copy the text into a message yourself.'
+      : 'Your answers are below. Email them to Luke at the address here. Use the button to open a ready-made email, or copy the text into a message yourself.';
+    review.hidden = false;
+    review.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function showThanks(){
+    var first = form.firstName.value.trim();
+    document.getElementById('thanksTitle').textContent = first ? 'Thank you, ' + first + '.' : 'Thank you.';
+    try { localStorage.removeItem(KEY); } catch(err){}
+    form.hidden = true;
+    review.hidden = true;
+    var thanks = document.getElementById('thanks');
+    thanks.hidden = false;
+    window.scrollTo({top:0, behavior:'smooth'});
+    thanks.focus({preventScroll:true});
+  }
+
+  function send(text){
+    var payload = {
+      name: (form.firstName.value + ' ' + form.lastName.value).trim(),
+      email: form.email.value.trim(),
+      phone: form.phone.value.trim(),
+      website: document.getElementById('website').value,
+      summary: text,
+      fields: collectFields()
+    };
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending\u2026';
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+      .then(function(r){ return r.json(); })
+      .then(function(res){ if (res && res.ok) showThanks(); else showReview(true); })
+      .catch(function(){ showReview(true); })
+      .then(function(){ submitBtn.disabled = false; submitBtn.textContent = 'Send to Luke'; });
+  }
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
     form.classList.add('touched');
@@ -539,8 +604,7 @@ footer p{margin:0 0 6px}
     summary.value = text;
     var subject = 'New client intake: ' + (form.firstName.value + ' ' + form.lastName.value).trim();
     document.getElementById('mailLink').href = 'mailto:' + ADDRESS + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
-    review.hidden = false;
-    review.scrollIntoView({behavior:'smooth', block:'start'});
+    if (ENDPOINT) send(text); else showReview(false);
   });
 
   function copyText(text, msg){
